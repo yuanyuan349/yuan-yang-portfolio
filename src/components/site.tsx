@@ -1,38 +1,67 @@
 import { profile } from '@/data/profile';
-
-export function Header() {
-  return <header className="site-header"><a className="wordmark" href="#home" aria-label={`${profile.name} 首页`}>{profile.name}<span> / AI PRODUCT</span></a><nav aria-label="主导航"><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#about">About</a><a href="#resume-todo">Resume</a></nav><a className="header-contact" href={`mailto:${profile.email}`}>Let’s talk <span aria-hidden="true">↗</span></a></header>;
-}
+import { CopyWechatButton } from './copy-wechat-button';
 
 export function Hero() {
-  return <section className="hero section-wrap" id="home"><div className="hero-kicker"><span className="status-dot"/> PORTFOLIO · 2026</div><div className="hero-main"><div><h1>{profile.name}<span className="hero-period">.</span></h1><p className="hero-role">{profile.role}</p></div><p className="hero-tagline">{profile.tagline}</p></div><div className="hero-bottom"><p>{profile.positioning}</p><a href="#projects" className="text-link">Explore selected work <span aria-hidden="true">↓</span></a></div></section>;
-}
-
-export function Projects() {
-  const { project } = profile;
-  return <section className="section-wrap section-block" id="projects"><div className="section-heading"><div><p className="eyebrow">01 / SELECTED PROJECT</p><h2>Research that<br/>shapes the product.</h2></div><span className="section-index">01 — 01</span></div><article className="project-card"><div className="project-top"><div><p className="eyebrow">AI EMOTIONAL COMPANION · {project.period}</p><h3>{project.name}<span> / {project.englishName}</span></h3></div><span className="award">{project.award}</span></div><p className="project-summary">{project.summary}</p><div className="metric-grid">{project.metrics.map((metric)=><div className="metric" key={metric.label}><strong>{metric.value}</strong><span>{metric.label}</span></div>)}</div><div className="project-story">{project.story.map((item,index)=><div className="story-item" key={item.title}><span className="story-number">0{index+1}</span><div><h4>{item.title}</h4><p>{item.text}</p></div></div>)}</div><div className="project-foot"><span>Project Lead · User Research · AI Product Design</span><span>ESP32S3 Prototype <b aria-hidden="true">↗</b></span></div></article></section>;
+  return <section className="intro section-wrap" id="home" aria-labelledby="intro-title">
+    <div className="intro-copy">
+      <p className="hello">你好，我是袁杨</p>
+      <h1 id="intro-title">AI 产品经理，关注面向用户的 AI 产品。</h1>
+      <p className="intro-description">我喜欢从用户真实的问题出发，<br className="desktop-break" />用研究、数据和 AI 工具把想法做成产品。</p>
+      <div className="intro-education">{profile.educationIntro.map((item) => <p key={item}>{item}</p>)}</div>
+      <div className="intro-actions"><a className="plain-link" href={`mailto:${profile.email}`}>发送邮件 <span aria-hidden="true">↗</span></a><CopyWechatButton value={profile.wechat} /></div>
+    </div>
+    <div className="photo-placeholder" role="img" aria-label="个人照片占位，等待添加真实照片"><span>[ Photo ]</span><small>public/images/yuan-yang.jpg</small></div>
+  </section>;
 }
 
 export function Experience() {
-  return <section className="section-wrap section-block" id="experience"><div className="section-heading"><div><p className="eyebrow">02 / EXPERIENCE</p><h2>Turning ambiguity<br/>into a working loop.</h2></div><span className="section-index">2 ROLES</span></div><div className="experience-list">{profile.experience.map((item,index)=><article className="experience-item" key={item.company}><div className="experience-meta"><span>0{index+1}</span><span>{item.dates}</span></div><div className="experience-content"><div className="experience-title"><div><h3>{item.company}</h3><p>{item.english} · {item.role}</p></div><div className="tag-list">{item.focus.map((tag)=><span key={tag}>{tag}</span>)}</div></div><div className="problem-action-result"><div><span>PROBLEM</span><p>{item.problem}</p></div><div><span>ACTION</span><p>{item.action}</p></div><div><span>RESULT</span><p>{item.result}</p></div></div></div></article>)}</div></section>;
+  return <section className="section-wrap content-section" id="experience" aria-labelledby="experience-title"><SectionTitle id="experience-title">经历</SectionTitle>
+    <div className="timeline">{profile.experience.map((item) => <article className="timeline-item" key={item.company}>
+      <p className="timeline-date">{item.dates}</p><div className="timeline-body"><div className="item-heading"><h3>{item.company}</h3><span>{item.role}</span></div>
+      <p className="body-copy">{item.description}</p><ul className="result-list">{item.results.map((result) => <li key={result}>{result}</li>)}</ul></div>
+    </article>)}</div>
+  </section>;
+}
+
+export function Projects() {
+  const { zhennuan, jobAssistant } = profile.projects;
+  return <section className="section-wrap content-section" id="projects" aria-labelledby="projects-title"><SectionTitle id="projects-title">作品</SectionTitle>
+    <article className="project-entry"><div className="project-heading"><div><h3>{zhennuan.name}</h3><p>{zhennuan.type}</p></div><span className="project-award">{zhennuan.award}</span></div>
+      <p className="body-copy project-description">{zhennuan.description}</p><ul className="fact-list" aria-label="项目关键事实">{zhennuan.facts.map((fact) => <li key={fact}>{fact}</li>)}</ul>
+      <details className="case-details"><summary>查看项目 <span aria-hidden="true">↗</span></summary><div className="case-content">{zhennuan.caseStudy.map((section) => <div className="case-row" key={section.heading}><h4>{section.heading}</h4><p>{section.body}</p></div>)}</div></details>
+    </article>
+    <article className="project-entry upcoming-project"><div className="project-heading"><div><h3>{jobAssistant.name}</h3><p>{jobAssistant.type}</p></div><span className="coming-soon">{jobAssistant.status}</span></div><p className="body-copy project-description">{jobAssistant.description}</p></article>
+  </section>;
 }
 
 export function About() {
-  return <section className="section-wrap about-section section-block" id="about"><div><p className="eyebrow">03 / ABOUT</p><h2>Public Administration<br/><span>×</span> AI <span>×</span> Product</h2></div><div className="about-copy"><p className="about-lead">理解复杂的人与组织，再把洞察落到 AI 产品体验里。</p><p>公共管理训练让我从真实场景、利益相关者与系统关系理解问题；用户研究和数据分析帮助我验证需求、找到优先级。我的关注点，是让 AI 能力回应具体的人，而不止停留在技术概念。</p><a className="text-link" href="#education">More about my foundation <span aria-hidden="true">↓</span></a></div></section>;
+  return <section className="section-wrap content-section" id="about" aria-labelledby="about-title"><SectionTitle id="about-title">关于我</SectionTitle><div className="text-section-copy">{profile.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div></section>;
 }
 
-export function Toolkit() {
-  return <section className="section-wrap section-block" id="toolkit"><div className="section-heading compact-heading"><div><p className="eyebrow">04 / TOOLKIT</p><h2>Methods, product, build.</h2></div></div><div className="toolkit-grid">{profile.toolkit.map((group)=><article className="toolkit-card" key={group.title}><p className="eyebrow">{group.title}</p><ul>{group.items.map((item)=><li key={item}>{item}<span aria-hidden="true">↗</span></li>)}</ul></article>)}</div></section>;
+export function Thoughts() {
+  return <section className="section-wrap content-section thoughts-section" id="thoughts" aria-labelledby="thoughts-title"><SectionTitle id="thoughts-title">随想</SectionTitle><p className="thought-copy">{profile.thought}</p></section>;
 }
 
 export function Education() {
-  return <section className="section-wrap section-block education-section" id="education"><div className="section-heading compact-heading"><div><p className="eyebrow">05 / EDUCATION</p><h2>A foundation in people<br/>and systems.</h2></div></div><div className="education-list">{profile.education.map((item,index)=><article className="education-item" key={item.school}><span className="education-index">0{index+1}</span><div className="education-main"><h3>{item.school}</h3><p>{item.degree}</p></div><span className="education-date">{item.dates}</span>{item.gpa&&<div className="education-highlights"><span>GPA <b>{item.gpa}</b></span><span>RANK <b>{item.rank}</b></span><span>{item.scholarship}</span></div>}</article>)}</div></section>;
+  return <section className="section-wrap content-section" id="education" aria-labelledby="education-title"><SectionTitle id="education-title">教育经历</SectionTitle><div className="education-list">{profile.education.map((item) => <article className="education-item" key={item.school}>
+    <div className="education-heading"><h3>{item.school}</h3><span>{item.dates}</span></div><p>{item.degree}</p>{item.distinctions && <ul className="distinction-list">{item.distinctions.map((distinction) => <li key={distinction}>{distinction}</li>)}</ul>}
+  </article>)}</div></section>;
+}
+
+export function Toolkit() {
+  return <section className="section-wrap content-section toolkit-section" id="toolkit" aria-labelledby="toolkit-title"><SectionTitle id="toolkit-title">工具与方法</SectionTitle><div className="toolkit-list">{profile.toolkit.map((group) => <p key={group.name}><span>{group.name}</span><span>{group.items.join(' · ')}</span></p>)}</div></section>;
 }
 
 export function Contact() {
-  return <section className="contact-section" id="contact"><div className="section-wrap contact-inner"><div><p className="eyebrow">06 / CONTACT</p><h2>Let’s make AI<br/>more useful.</h2></div><div className="contact-links"><a href={`mailto:${profile.email}`}>Email <span>{profile.email}</span><b aria-hidden="true">↗</b></a><a href="#resume-todo" id="resume-todo">Resume <span>TODO · PDF to be added</span><b aria-hidden="true">↓</b></a><p className="social-todo">GitHub — Coming soon <i> / </i> LinkedIn — Coming soon</p></div></div></section>;
+  return <section className="section-wrap content-section contact-section" id="contact" aria-labelledby="contact-title"><SectionTitle id="contact-title">联系我</SectionTitle>
+    <p>如果你想聊聊 AI 产品、<br className="mobile-break" />用户研究，或者一个正在做的产品：</p><a className="contact-email" href={`mailto:${profile.email}`}>{profile.email}</a><div className="contact-wechat">微信：<CopyWechatButton value={profile.wechat} /></div>
+  </section>;
 }
 
 export function Footer() {
-  return <footer className="site-footer section-wrap"><a className="wordmark" href="#home">{profile.name}<span> / AI PRODUCT</span></a><p>Thoughtful products begin with better questions.</p><a href="#home">Back to top ↑</a><span>© {new Date().getFullYear()} {profile.name}</span></footer>;
+  return <footer className="site-footer"><div className="section-wrap"><span>{profile.name}</span><a href="#home">回到顶部 ↑</a></div></footer>;
+}
+
+function SectionTitle({ children, id }: { children: React.ReactNode; id: string }) {
+  return <h2 className="section-title" id={id}>{children}</h2>;
 }
